@@ -5,16 +5,22 @@ import data.Card;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class OrdinaryPurchase {
-    public static SelenideElement approvedOperationNotification = $(byText("Успешно. Операция одобрена банком.")).parent().$("[class=\"notification__content\"]");
-    public static SelenideElement failedOperationNotification = $(byText("Ошибка! Банк отказал в проведении операции")).parent().$("[class=\"notification__content\"]");
-    private final SelenideElement heading = $$("h3").find(exactText("Оплата по карте"));
+public class PaymentPage {
+    private final SelenideElement headingCredit = $$("h3").find(exactText("Кредит по данным карты"));
+
+    public final SelenideElement creditButton = $$(".button").findBy(text("Купить в кредит"));
+    private final SelenideElement heading = $$("h2").findBy(text("Путешествие дня"));
+    private final SelenideElement buyButton = $$(".button").findBy(text("Купить"));
+    public final SelenideElement approvedOperationNotification = $$(".notification__content").findBy((text("Операция одобрена Банком.")));
+    public final SelenideElement failedOperationNotification = $$(".notification__content").findBy((text("Ошибка! Банк отказал в проведении операции.")));
+    private static final SelenideElement successNotificationTitle = $$(".notification__title").findBy((text("Успешно")));
+    private static final SelenideElement failedNotificationTitle = $$(".notification__title").findBy((text("Ошибка")));
+    private final SelenideElement headingOrdinary = $$("h3").find(exactText("Оплата по карте"));
     private final SelenideElement cardNumberField = $(byText("Номер карты")).parent().$("[class=\"input__control\"]");
     private final SelenideElement monthField = $(byText("Месяц")).parent().$("[class=\"input__control\"]");
     private final SelenideElement yearField = $(byText("Год")).parent().$("[class=\"input__control\"]");
@@ -28,7 +34,7 @@ public class OrdinaryPurchase {
     private final SelenideElement cancelField = $$("[class=\"icon-button__text\"]").first();
     private final SelenideElement continueButton = $$("button").find(exactText("Продолжить"));
 
-    public OrdinaryPurchase() {
+    public PaymentPage() {
         heading.shouldBe(visible);
     }
 
@@ -42,30 +48,47 @@ public class OrdinaryPurchase {
     }
 
     public void getApprovedOperationNotification() {
-        approvedOperationNotification.shouldBe(visible, Duration.ofSeconds(15));
+        successNotificationTitle
+                .shouldBe(visible, Duration.ofSeconds(14))
+                .shouldHave(exactText("Успешно"));
+        approvedOperationNotification
+                .shouldHave(exactText("Операция одобрена Банком."));
         cancelField.click();
     }
 
     public void getFailedNotification() {
-        failedOperationNotification.shouldBe(visible, Duration.ofSeconds(15));
+        failedNotificationTitle
+                .shouldBe(visible, Duration.ofSeconds(14))
+                .shouldHave(exactText("Ошибка"));
+        failedOperationNotification
+                .shouldHave(exactText("Ошибка! Банк отказал в проведении операции."));
         cancelField.click();
     }
 
 
     public void getNotificationWrongFormat() {
-        wrongFormatErrorNotification.shouldBe(visible, Duration.ofSeconds(15));
+        wrongFormatErrorNotification.shouldBe(visible);
     }
 
     public void getNotificationExpirationDateError() {
-        cardExpirationDateError.shouldBe(visible, Duration.ofSeconds(15));
+        cardExpirationDateError.shouldBe(visible);
     }
 
     public void getNotificationExpiredError() {
-        cardExpiredDateError.shouldBe(visible, Duration.ofSeconds(15));
+        cardExpiredDateError.shouldBe(visible);
     }
 
     public void getNotificationRequiredFieldError() {
-        requiredFieldError.shouldBe(visible, Duration.ofSeconds(15));
+        requiredFieldError.shouldBe(visible);
+    }
+    public void  goToBuyPage() {
+        buyButton.click();
+        headingOrdinary.shouldBe(visible);
+    }
+
+    public void  goToCreditPage() {
+        creditButton.click();
+        headingCredit.shouldBe(visible);
     }
 
 }

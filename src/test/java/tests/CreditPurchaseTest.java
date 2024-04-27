@@ -6,7 +6,7 @@ import lombok.val;
 import org.junit.jupiter.api.*;
 import data.DataHelper;
 import data.SQLHelper;
-import pages.PaymentMethod;
+import pages.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,186 +37,186 @@ public class CreditPurchaseTest {
 
     @Test
     void shouldBuyCardApproved() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getApprovedCard());
-        payment.getApprovedOperationNotification();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getApprovedCard());
+        page.getApprovedOperationNotification();
         assertEquals("APPROVED", SQLHelper.getCreditRequestStatus());
     }
 
 
     @Test
     void shouldNotBuyDeclinedCard() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getDeclinedCard());
-        payment.getFailedNotification();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getDeclinedCard());
+        page.getFailedNotification();
         assertEquals("DECLINED", SQLHelper.getCreditRequestStatus());
     }
 
 
     @Test
     void shouldNotBuyCardNumberFieldEmpty() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardNumberFieldEmpty());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardNumberFieldEmpty());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
 
     @Test
     void shouldNotBuyCardNumberLessThan16Symbols() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardNumberLessThan16Symbols());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardNumberLessThan16Symbols());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
 
     @Test
     void shouldNotBuyCardHolderInCyrillic() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardHolderInCyrillic());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardHolderInCyrillic());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardHolderInOneWord() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardHolderInOneWord());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardHolderInOneWord());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardHolderWithSpecialSymbols() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardHolderWithSpecialSymbols());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardHolderWithSpecialSymbols());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardHolderEmptyField() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardHolderEmptyField());
-        payment.getNotificationRequiredFieldError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardHolderEmptyField());
+        page.getNotificationRequiredFieldError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardMonthLessThan2Figures() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardMonthLessThan2Figures());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardMonthLessThan2Figures());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardMonthEqual00() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardMonthEqual00());
-        payment.getNotificationExpirationDateError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardMonthEqual00());
+        page.getNotificationExpirationDateError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardMonthMoreThan12() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardMonthMoreThan12());
-        payment.getNotificationExpirationDateError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardMonthMoreThan12());
+        page.getNotificationExpirationDateError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardMonthEmptyField() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardMonthEmptyField());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardMonthEmptyField());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldBuyCardCurrentMonthAndYearPlus5Years() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardCurrentMonthAndYearPlus5Years());
-        payment.getApprovedOperationNotification();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardCurrentMonthAndYearPlus5Years());
+        page.getApprovedOperationNotification();
         assertEquals("APPROVED", SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardCurrentMonthAndYearMinus1Month() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardCurrentMonthAndYearMinus1Month());
-        payment.getNotificationExpirationDateError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardCurrentMonthAndYearMinus1Month());
+        page.getNotificationExpirationDateError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyNotCardCurrentMonthAndYearPlus6Years() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardCurrentMonthAndYearPlus6Years());
-        payment.getNotificationExpirationDateError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardCurrentMonthAndYearPlus6Years());
+        page.getNotificationExpirationDateError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardYearEmptyField() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardYearEmptyField());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardYearEmptyField());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardYearOnlyOneFigure() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardYearOnlyOneFigure());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardYearOnlyOneFigure());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
 
     }
 
     @Test
     void shouldNotBuyCardCvv000() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardCvv000());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardCvv000());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardYearCvvEmptyField() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardYearCvvEmptyField());
-        payment.getNotificationRequiredFieldError();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardYearCvvEmptyField());
+        page.getNotificationRequiredFieldError();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 
     @Test
     void shouldNotBuyCardCvvLessThanThreeFigures() {
-        val page = new PaymentMethod();
-        val payment = page.goToCreditPage();
-        payment.inputData(DataHelper.getCardCvvLessThanThreeFigures());
-        payment.getNotificationWrongFormat();
+        val page = new PaymentPage();
+        page.goToCreditPage();
+        page.inputData(DataHelper.getCardCvvLessThanThreeFigures());
+        page.getNotificationWrongFormat();
         assertNull(SQLHelper.getCreditRequestStatus());
     }
 }
